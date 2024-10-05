@@ -33,7 +33,7 @@ export default async function InfoPage({
   );
 
   const group = await getPublicGroupInfoByIdUseCase(parseInt(groupId));
-
+  console.log(group)
   if (!group) {
     throw new NotFoundError("Group not found");
   }

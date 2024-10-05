@@ -6,6 +6,7 @@ import {
   updateGroupImageUseCase,
 } from "@/use-cases/files";
 import {
+  toggleGroupCohortUseCase,
   toggleGroupVisibilityUseCase,
   updateGroupDescriptionUseCase,
   updateGroupNameUseCase,
@@ -68,6 +69,14 @@ export const toggleGroupVisibilityAction = authenticatedAction
   .input(z.number())
   .handler(async ({ input: groupId, ctx: { user } }) => {
     await toggleGroupVisibilityUseCase(user, groupId);
+    revalidatePath(`/dashboard/groups/${groupId}/settings`);
+  });
+
+export const toggleGroupCohortAction = authenticatedAction
+  .createServerAction()
+  .input(z.number())
+  .handler(async ({ input: groupId, ctx: { user } }) => {
+    await toggleGroupCohortUseCase(user, groupId);
     revalidatePath(`/dashboard/groups/${groupId}/settings`);
   });
 

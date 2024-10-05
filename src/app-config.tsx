@@ -4,9 +4,9 @@ export const appConfig: {
   mode: "live",
 };
 
-export const protectedRoutes = ["/purchases", "/dashboard"];
-export const applicationName = "Group Finder";
-export const companyName = "Groupie, LLC";
+export const protectedRoutes = ["/lms", "/dashboard"];
+export const applicationName = "CODAC";
+export const companyName = "Code Academy Berlin";
 
 export const MAX_UPLOAD_IMAGE_SIZE_IN_MB = 5;
 export const MAX_UPLOAD_IMAGE_SIZE = 1024 * 1024 * MAX_UPLOAD_IMAGE_SIZE_IN_MB;

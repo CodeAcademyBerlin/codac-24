@@ -34,7 +34,7 @@ function MemberCard({
         )}
       >
         <Avatar>
-          <AvatarImage src={member.image || "/group.jpeg"} />
+          <AvatarImage src={member.image || "/codac-logo.png"} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <Link href={`/users/${member.userId}/info`}>

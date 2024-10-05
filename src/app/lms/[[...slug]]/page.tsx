@@ -2,12 +2,15 @@ import { getPage, getPages } from "@/app/source";
 import type { Metadata } from "next";
 import { DocsPage, DocsBody } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
+import { assertAuthenticated, getCurrentUser } from "@/lib/session";
 
 export default async function Page({
   params,
 }: {
   params: { slug?: string[] };
 }) {
+  const user = await getCurrentUser();
+  console.log(user)
   const page = getPage(params.slug);
 
   if (page == null) {

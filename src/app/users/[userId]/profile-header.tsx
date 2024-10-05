@@ -29,7 +29,7 @@ export async function ProfileHeader({ userId }: { userId: UserId }) {
         <div className="flex justify-between items-center">
           <div className="flex flex-col items-center md:flex-row gap-8">
             <Image
-              src={profile.image ?? "/group.jpeg"}
+              src={profile.image ?? "/codac-logo.png"}
               width={60}
               height={60}
               alt="image of the group"

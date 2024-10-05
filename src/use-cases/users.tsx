@@ -7,6 +7,8 @@ import {
   createUser,
   deleteUser,
   getUserByEmail,
+  getUsers,
+  getUsersWithProfile,
   updateUser,
   verifyPassword,
 } from "@/data-access/users";
@@ -54,6 +56,16 @@ import { createTransaction } from "@/data-access/utils";
 import { LoginError, PublicError } from "./errors";
 import { deleteSessionForUser } from "@/data-access/sessions";
 
+export async function getUsersUseCase() {
+  // TODO: add auth check admin
+  const users = await getUsers();
+  return users;
+}
+export async function getUsersWithProfileUseCase() {
+  // TODO: add auth check admin
+  const users = await getUsersWithProfile();
+  return users;
+}
 export async function deleteUserUseCase(
   authenticatedUser: UserSession,
   userToDeleteId: UserId

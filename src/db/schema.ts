@@ -13,13 +13,13 @@ import {
 export const roleEnum = pgEnum("role", ["member", "admin"]);
 export const accountTypeEnum = pgEnum("type", ["email", "google", "github"]);
 
-export const users = pgTable("gf_user", {
+export const users = pgTable("user", {
   id: serial("id").primaryKey(),
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
 });
 
-export const accounts = pgTable("gf_accounts", {
+export const accounts = pgTable("accounts", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -33,7 +33,7 @@ export const accounts = pgTable("gf_accounts", {
   userIdAccountTypeIdx: index("user_id_account_type_idx").on(table.userId, table.accountType),
 }));
 
-export const magicLinks = pgTable("gf_magic_links", {
+export const magicLinks = pgTable("magic_links", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
   token: text("token"),
@@ -42,7 +42,7 @@ export const magicLinks = pgTable("gf_magic_links", {
   tokenIdx: index("magic_links_token_idx").on(table.token),
 }));
 
-export const resetTokens = pgTable("gf_reset_tokens", {
+export const resetTokens = pgTable("reset_tokens", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -54,7 +54,7 @@ export const resetTokens = pgTable("gf_reset_tokens", {
   tokenIdx: index("reset_tokens_token_idx").on(table.token),
 }));
 
-export const verifyEmailTokens = pgTable("gf_verify_email_tokens", {
+export const verifyEmailTokens = pgTable("verify_email_tokens", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -66,7 +66,7 @@ export const verifyEmailTokens = pgTable("gf_verify_email_tokens", {
   tokenIdx: index("verify_email_tokens_token_idx").on(table.token),
 }));
 
-export const profiles = pgTable("gf_profile", {
+export const profiles = pgTable("profile", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -78,7 +78,7 @@ export const profiles = pgTable("gf_profile", {
   bio: text("bio").notNull().default(""),
 });
 
-export const sessions = pgTable("gf_session", {
+export const sessions = pgTable("session", {
   id: text("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -91,7 +91,7 @@ export const sessions = pgTable("gf_session", {
   userIdIdx: index("sessions_user_id_idx").on(table.userId),
 }));
 
-export const subscriptions = pgTable("gf_subscriptions", {
+export const subscriptions = pgTable("subscriptions", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -105,7 +105,7 @@ export const subscriptions = pgTable("gf_subscriptions", {
   stripeSubscriptionIdIdx: index("subscriptions_stripe_subscription_id_idx").on(table.stripeSubscriptionId),
 }));
 
-export const following = pgTable("gf_following", {
+export const following = pgTable("following", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -123,19 +123,23 @@ export const following = pgTable("gf_following", {
  * The last thing you'd want is for your email list to get lost due to a
  * third party provider shutting down or dropping your data.
  */
-export const newsletters = pgTable("gf_newsletter", {
+export const newsletters = pgTable("newsletter", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
 });
 
-export const groups = pgTable("gf_group", {
+
+
+export const groups = pgTable("group", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
+  type: text("type").notNull().default("other"),
   description: text("description").notNull(),
   isPublic: boolean("isPublic").notNull().default(false),
+  isCohort: boolean("isCohort").notNull().default(false),
   bannerId: text("bannerId"),
   info: text("info").default(""),
   youtubeLink: text("youtubeLink").default(""),
@@ -146,7 +150,29 @@ export const groups = pgTable("gf_group", {
   userIdIsPublicIdx: index("groups_user_id_is_public_idx").on(table.userId, table.isPublic),
 }));
 
-export const memberships = pgTable("gf_membership", {
+export const cohorts = pgTable("cohort", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  aka: text("aka"),
+  startDate: timestamp('startDate'),
+  endDate: timestamp('endDate'),
+  description: text("description"),
+  groupId: serial("groupId")
+  .notNull()
+  .references(() => groups.id, { onDelete: "cascade" })
+});
+
+export const students = pgTable("student", {
+  id: serial("id").primaryKey(),
+  userId: integer('userId')
+  .references(() => users.id),
+  cohortId: integer('cohortId')
+  .references(() => cohorts.id, { onDelete: 'cascade' })
+  .notNull(),
+  role: roleEnum("role").default("member"),
+});
+
+export const memberships = pgTable("membership", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -159,7 +185,7 @@ export const memberships = pgTable("gf_membership", {
   userIdGroupIdIdx: index("memberships_user_id_group_id_idx").on(table.userId, table.groupId),
 }));
 
-export const invites = pgTable("gf_invites", {
+export const invites = pgTable("invites", {
   id: serial("id").primaryKey(),
   token: text("token")
     .notNull()
@@ -170,7 +196,7 @@ export const invites = pgTable("gf_invites", {
     .references(() => groups.id, { onDelete: "cascade" }),
 });
 
-export const events = pgTable("gf_events", {
+export const events = pgTable("events", {
   id: serial("id").primaryKey(),
   groupId: serial("groupId")
     .notNull()
@@ -181,7 +207,7 @@ export const events = pgTable("gf_events", {
   startsOn: timestamp("startsOn", { mode: "date" }).notNull(),
 });
 
-export const notifications = pgTable("gf_notifications", {
+export const notifications = pgTable("notifications", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -196,7 +222,7 @@ export const notifications = pgTable("gf_notifications", {
   createdOn: timestamp("createdOn", { mode: "date" }).notNull(),
 });
 
-export const posts = pgTable("gf_posts", {
+export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -209,7 +235,7 @@ export const posts = pgTable("gf_posts", {
   createdOn: timestamp("createdOn", { mode: "date" }).notNull(),
 });
 
-export const reply = pgTable("gf_replies", {
+export const reply = pgTable("replies", {
   id: serial("id").primaryKey(),
   userId: serial("userId")
     .notNull()
@@ -225,6 +251,14 @@ export const reply = pgTable("gf_replies", {
 }, (table) => ({
   postIdIdx: index("replies_post_id_idx").on(table.postId),
 }));
+
+/**
+ * CODAC
+ *
+ */
+
+
+
 
 /**
  * RELATIONSHIPS
@@ -282,6 +316,10 @@ export type NewEvent = typeof events.$inferInsert;
 
 export type User = typeof users.$inferSelect;
 export type Profile = typeof profiles.$inferSelect;
+
+export type Cohort = typeof cohorts.$inferSelect;
+export type Student = typeof students.$inferSelect;
+
 
 export type Notification = typeof notifications.$inferSelect;
 

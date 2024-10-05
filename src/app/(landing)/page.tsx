@@ -11,6 +11,8 @@ import { TheProblemSection } from "@/app/(landing)/_sections/the-problem";
 import { appConfig } from "@/app-config";
 import { getUserPlanUseCase } from "@/use-cases/subscriptions";
 import { getCurrentUser } from "@/lib/session";
+import { CodacLogoTriangle } from "./_sections/codac-logo-triangle";
+import { LandingGraphics } from "./_sections/landing-graphics";
 
 export default async function Home() {
   if (appConfig.mode === "comingSoon") {
@@ -27,14 +29,11 @@ export default async function Home() {
 
   if (appConfig.mode === "live") {
     const user = await getCurrentUser();
-    const hasSubscription = user
-      ? (await getUserPlanUseCase(user.id)) !== "free"
-      : false;
+
 
     return (
       <div>
         <HeroSection />
-        <PricingSection hasSubscription={hasSubscription} />
       </div>
     );
   }

@@ -1,4 +1,4 @@
-import "@/app/globals.css";
+import "@/styles/globals.css";
 import "fumadocs-ui/style.css";
 import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
@@ -11,10 +11,11 @@ import { applicationName, appConfig } from "@/app-config";
 import PostHogPageView from "@/components/posthog-page-view";
 import { ComingSoonFooter } from "@/app/(coming-soon)/footer";
 import { Header } from "@/app/_header/header";
-
+import localFont from "next/font/local";
 import { Archivo } from "next/font/google";
 import { Libre_Franklin } from "next/font/google";
 import { BreakpointOverlay } from "@/components/breakpoint-overlay";
+
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -41,22 +42,22 @@ export const metadata: Metadata = {
   openGraph:
     mode === "comingSoon"
       ? {
-          title: "WDCStarterKit.com",
-          description:
-            "I'm building the ultimate next.js starter kit to help you hit the ground runnning on your next saas product.",
-          url: "https://wdcstarterkit.com",
-          siteName: "WDC StarterKit",
-          type: "website",
-          images: [
-            {
-              url: "https://wdcstarterkit.com/starterkitcard.png",
-              secureUrl: "https://wdcstarterkit.com/starterkitcard.png",
-              width: 800,
-              height: 418,
-              alt: "The WDC StarterKit social media card image",
-            },
-          ],
-        }
+        title: "WDCStarterKit.com",
+        description:
+          "I'm building the ultimate next.js starter kit to help you hit the ground runnning on your next saas product.",
+        url: "https://wdcstarterkit.com",
+        siteName: "WDC StarterKit",
+        type: "website",
+        images: [
+          {
+            url: "https://wdcstarterkit.com/starterkitcard.png",
+            secureUrl: "https://wdcstarterkit.com/starterkitcard.png",
+            width: 800,
+            height: 418,
+            alt: "The WDC StarterKit social media card image",
+          },
+        ],
+      }
       : undefined,
 };
 
@@ -77,7 +78,7 @@ export default async function RootLayout({
           <Suspense>
             <PostHogPageView />
           </Suspense>
-          <NextTopLoader />
+          <NextTopLoader color="#9333ea" showSpinner={false} showAtBottom={false} />
           <div className="flex flex-col w-full">
             {appConfig.mode === "live" && <Header />}
             <div>{children}</div>

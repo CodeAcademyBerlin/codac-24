@@ -51,7 +51,7 @@ export default async function BrowsePage({
                   <div className="flex relative w-full sm:max-w-md">
                     <Input
                       defaultValue={search}
-                      placeholder="basketball, programming, crafting, etc."
+                      placeholder="web development, data science, programming, etc."
                       name="search"
                       id="group"
                       className="w-full"

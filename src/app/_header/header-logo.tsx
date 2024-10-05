@@ -1,6 +1,7 @@
 "use client";
 
 import { applicationName } from "@/app-config";
+import { BrandText } from "@/components/brand/brand-text";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,10 +19,10 @@ export function HeaderLogo() {
         className="rounded w-8 h-8"
         width="50"
         height="50"
-        src="/group.jpeg"
+        src="/codac-logo.png"
         alt="hero image"
       />
-      {applicationName}
+      <BrandText> {applicationName}</BrandText>
     </Link>
   );
 }

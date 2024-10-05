@@ -13,7 +13,7 @@ export function ComingSoonHeader() {
             className="hover:text-blue-100 flex gap-1 items-center"
           >
             <Image
-              src="/group.jpeg"
+              src="/codac-logo.png"
               width="60"
               height="60"
               alt="hero image"

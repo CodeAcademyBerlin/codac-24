@@ -9,6 +9,7 @@ import { GroupNameForm } from "./group-name-form";
 import { ConfigurationPanel } from "@/components/configuration-panel";
 import { GroupDescriptionForm } from "./group-description-form";
 import { SocialLinksForm } from "./social-links-form";
+import { GroupCohortSwitch } from "./cohort-switch";
 
 export default async function Settings({
   params,
@@ -49,14 +50,21 @@ export default async function Settings({
           <GroupNameForm groupId={group.id} groupName={group?.name ?? ""} />
         </ConfigurationPanel>
 
+
         <ConfigurationPanel title={"Group Visibility"}>
-          <div className="flex flex-col gap-8">
+          <div className="w-full flex flex-col gap-8">
+            <GroupVisibilitySwitch group={group} />
             <p className="dark:text-gray-400 text-sm">
               Groups are private by default. If you want random people on the
               internet to find and join your group without an invite, switch
               this to on.
             </p>
-            <GroupVisibilitySwitch group={group} />
+          </div>
+          <div className="flex flex-col gap-8">
+            <GroupCohortSwitch group={group} />
+            <p className="dark:text-gray-400 text-sm">
+              Group part of Code Academy Berlin.
+            </p>
           </div>
         </ConfigurationPanel>
       </div>

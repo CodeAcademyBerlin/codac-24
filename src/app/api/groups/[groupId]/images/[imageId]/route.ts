@@ -15,7 +15,7 @@ export const GET = async (
 
     const url =
       params.imageId === "default"
-        ? `${env.HOST_NAME}/group.jpeg`
+        ? `${env.HOST_NAME}/codac-logo.png`
         : await getGroupImageUrlUseCase(user, {
             imageId: params.imageId,
             groupId,

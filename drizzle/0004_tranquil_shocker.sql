@@ -1,0 +1,1 @@
+ALTER TABLE "cohort" ALTER COLUMN "description" DROP NOT NULL;

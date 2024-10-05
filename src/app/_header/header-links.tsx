@@ -42,8 +42,8 @@ export function HeaderLinks({ isAuthenticated }: { isAuthenticated: boolean }) {
             asChild
             className="flex items-center justify-center gap-2"
           >
-            <Link href={"/docs"}>
-              <BookIcon className="w-4 h-4" /> API Docs
+            <Link href={"/lms"}>
+              <BookIcon className="w-4 h-4" /> LMS
             </Link>
           </Button>
         </div>
@@ -51,13 +51,13 @@ export function HeaderLinks({ isAuthenticated }: { isAuthenticated: boolean }) {
 
       {(isLandingPage || !isAuthenticated) && (
         <div className="hidden md:flex gap-4">
-          <Button variant={"link"} asChild>
+          {/* <Button variant={"link"} asChild>
             <Link href="/#features">Features</Link>
-          </Button>
+          </Button> */}
 
-          <Button variant={"link"} asChild>
+          {/* <Button variant={"link"} asChild>
             <Link href="/#pricing">Pricing</Link>
-          </Button>
+          </Button> */}
 
           <Button variant={"link"} asChild>
             <Link href={"/browse"}>Browse Groups</Link>

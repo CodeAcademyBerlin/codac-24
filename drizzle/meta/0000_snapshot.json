@@ -1,11 +1,11 @@
 {
-  "id": "ac938e5f-d37f-48ac-8205-d1c260947555",
+  "id": "948dffcc-88dc-4930-bcff-ec346d9b5b06",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
-    "public.gf_accounts": {
-      "name": "gf_accounts",
+    "public.accounts": {
+      "name": "accounts",
       "schema": "",
       "columns": {
         "id": {
@@ -52,12 +52,21 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_id_account_type_idx": {
+          "name": "user_id_account_type_idx",
+          "columns": [
+            "userId",
+            "accountType"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "gf_accounts_userId_gf_user_id_fk": {
-          "name": "gf_accounts_userId_gf_user_id_fk",
-          "tableFrom": "gf_accounts",
-          "tableTo": "gf_user",
+        "accounts_userId_user_id_fk": {
+          "name": "accounts_userId_user_id_fk",
+          "tableFrom": "accounts",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -70,15 +79,15 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "gf_accounts_githubId_unique": {
-          "name": "gf_accounts_githubId_unique",
+        "accounts_githubId_unique": {
+          "name": "accounts_githubId_unique",
           "nullsNotDistinct": false,
           "columns": [
             "githubId"
           ]
         },
-        "gf_accounts_googleId_unique": {
-          "name": "gf_accounts_googleId_unique",
+        "accounts_googleId_unique": {
+          "name": "accounts_googleId_unique",
           "nullsNotDistinct": false,
           "columns": [
             "googleId"
@@ -86,8 +95,50 @@
         }
       }
     },
-    "public.gf_events": {
-      "name": "gf_events",
+    "public.cohort": {
+      "name": "cohort",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "cohort_userId_user_id_fk": {
+          "name": "cohort_userId_user_id_fk",
+          "tableFrom": "cohort",
+          "tableTo": "user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.events": {
+      "name": "events",
       "schema": "",
       "columns": {
         "id": {
@@ -129,10 +180,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "gf_events_groupId_gf_group_id_fk": {
-          "name": "gf_events_groupId_gf_group_id_fk",
-          "tableFrom": "gf_events",
-          "tableTo": "gf_group",
+        "events_groupId_group_id_fk": {
+          "name": "events_groupId_group_id_fk",
+          "tableFrom": "events",
+          "tableTo": "group",
           "columnsFrom": [
             "groupId"
           ],
@@ -146,8 +197,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.gf_following": {
-      "name": "gf_following",
+    "public.following": {
+      "name": "following",
       "schema": "",
       "columns": {
         "id": {
@@ -169,12 +220,21 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "following_user_id_foreign_user_id_idx": {
+          "name": "following_user_id_foreign_user_id_idx",
+          "columns": [
+            "userId",
+            "foreignUserId"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "gf_following_userId_gf_user_id_fk": {
-          "name": "gf_following_userId_gf_user_id_fk",
-          "tableFrom": "gf_following",
-          "tableTo": "gf_user",
+        "following_userId_user_id_fk": {
+          "name": "following_userId_user_id_fk",
+          "tableFrom": "following",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -184,10 +244,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "gf_following_foreignUserId_gf_user_id_fk": {
-          "name": "gf_following_foreignUserId_gf_user_id_fk",
-          "tableFrom": "gf_following",
-          "tableTo": "gf_user",
+        "following_foreignUserId_user_id_fk": {
+          "name": "following_foreignUserId_user_id_fk",
+          "tableFrom": "following",
+          "tableTo": "user",
           "columnsFrom": [
             "foreignUserId"
           ],
@@ -201,8 +261,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.gf_group": {
-      "name": "gf_group",
+    "public.group": {
+      "name": "group",
       "schema": "",
       "columns": {
         "id": {
@@ -278,12 +338,21 @@
           "default": "''"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "groups_user_id_is_public_idx": {
+          "name": "groups_user_id_is_public_idx",
+          "columns": [
+            "userId",
+            "isPublic"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "gf_group_userId_gf_user_id_fk": {
-          "name": "gf_group_userId_gf_user_id_fk",
-          "tableFrom": "gf_group",
-          "tableTo": "gf_user",
+        "group_userId_user_id_fk": {
+          "name": "group_userId_user_id_fk",
+          "tableFrom": "group",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -297,8 +366,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.gf_invites": {
-      "name": "gf_invites",
+    "public.invites": {
+      "name": "invites",
       "schema": "",
       "columns": {
         "id": {
@@ -323,10 +392,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "gf_invites_groupId_gf_group_id_fk": {
-          "name": "gf_invites_groupId_gf_group_id_fk",
-          "tableFrom": "gf_invites",
-          "tableTo": "gf_group",
+        "invites_groupId_group_id_fk": {
+          "name": "invites_groupId_group_id_fk",
+          "tableFrom": "invites",
+          "tableTo": "group",
           "columnsFrom": [
             "groupId"
           ],
@@ -339,8 +408,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "gf_invites_token_unique": {
-          "name": "gf_invites_token_unique",
+        "invites_token_unique": {
+          "name": "invites_token_unique",
           "nullsNotDistinct": false,
           "columns": [
             "token"
@@ -348,8 +417,8 @@
         }
       }
     },
-    "public.gf_magic_links": {
-      "name": "gf_magic_links",
+    "public.magic_links": {
+      "name": "magic_links",
       "schema": "",
       "columns": {
         "id": {
@@ -377,12 +446,20 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "magic_links_token_idx": {
+          "name": "magic_links_token_idx",
+          "columns": [
+            "token"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "gf_magic_links_email_unique": {
-          "name": "gf_magic_links_email_unique",
+        "magic_links_email_unique": {
+          "name": "magic_links_email_unique",
           "nullsNotDistinct": false,
           "columns": [
             "email"
@@ -390,8 +467,8 @@
         }
       }
     },
-    "public.gf_membership": {
-      "name": "gf_membership",
+    "public.membership": {
+      "name": "membership",
       "schema": "",
       "columns": {
         "id": {
@@ -421,12 +498,21 @@
           "default": "'member'"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "memberships_user_id_group_id_idx": {
+          "name": "memberships_user_id_group_id_idx",
+          "columns": [
+            "userId",
+            "groupId"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "gf_membership_userId_gf_user_id_fk": {
-          "name": "gf_membership_userId_gf_user_id_fk",
-          "tableFrom": "gf_membership",
-          "tableTo": "gf_user",
+        "membership_userId_user_id_fk": {
+          "name": "membership_userId_user_id_fk",
+          "tableFrom": "membership",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -436,10 +522,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "gf_membership_groupId_gf_group_id_fk": {
-          "name": "gf_membership_groupId_gf_group_id_fk",
-          "tableFrom": "gf_membership",
-          "tableTo": "gf_group",
+        "membership_groupId_group_id_fk": {
+          "name": "membership_groupId_group_id_fk",
+          "tableFrom": "membership",
+          "tableTo": "group",
           "columnsFrom": [
             "groupId"
           ],
@@ -453,8 +539,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.gf_newsletter": {
-      "name": "gf_newsletter",
+    "public.newsletter": {
+      "name": "newsletter",
       "schema": "",
       "columns": {
         "id": {
@@ -474,8 +560,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "gf_newsletter_email_unique": {
-          "name": "gf_newsletter_email_unique",
+        "newsletter_email_unique": {
+          "name": "newsletter_email_unique",
           "nullsNotDistinct": false,
           "columns": [
             "email"
@@ -483,8 +569,8 @@
         }
       }
     },
-    "public.gf_notifications": {
-      "name": "gf_notifications",
+    "public.notifications": {
+      "name": "notifications",
       "schema": "",
       "columns": {
         "id": {
@@ -539,10 +625,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "gf_notifications_userId_gf_user_id_fk": {
-          "name": "gf_notifications_userId_gf_user_id_fk",
-          "tableFrom": "gf_notifications",
-          "tableTo": "gf_user",
+        "notifications_userId_user_id_fk": {
+          "name": "notifications_userId_user_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -552,10 +638,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "gf_notifications_groupId_gf_group_id_fk": {
-          "name": "gf_notifications_groupId_gf_group_id_fk",
-          "tableFrom": "gf_notifications",
-          "tableTo": "gf_group",
+        "notifications_groupId_group_id_fk": {
+          "name": "notifications_groupId_group_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "group",
           "columnsFrom": [
             "groupId"
           ],
@@ -569,8 +655,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.gf_posts": {
-      "name": "gf_posts",
+    "public.posts": {
+      "name": "posts",
       "schema": "",
       "columns": {
         "id": {
@@ -612,10 +698,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "gf_posts_userId_gf_user_id_fk": {
-          "name": "gf_posts_userId_gf_user_id_fk",
-          "tableFrom": "gf_posts",
-          "tableTo": "gf_user",
+        "posts_userId_user_id_fk": {
+          "name": "posts_userId_user_id_fk",
+          "tableFrom": "posts",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -625,10 +711,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "gf_posts_groupId_gf_group_id_fk": {
-          "name": "gf_posts_groupId_gf_group_id_fk",
-          "tableFrom": "gf_posts",
-          "tableTo": "gf_group",
+        "posts_groupId_group_id_fk": {
+          "name": "posts_groupId_group_id_fk",
+          "tableFrom": "posts",
+          "tableTo": "group",
           "columnsFrom": [
             "groupId"
           ],
@@ -642,8 +728,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.gf_profile": {
-      "name": "gf_profile",
+    "public.profile": {
+      "name": "profile",
       "schema": "",
       "columns": {
         "id": {
@@ -686,10 +772,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "gf_profile_userId_gf_user_id_fk": {
-          "name": "gf_profile_userId_gf_user_id_fk",
-          "tableFrom": "gf_profile",
-          "tableTo": "gf_user",
+        "profile_userId_user_id_fk": {
+          "name": "profile_userId_user_id_fk",
+          "tableFrom": "profile",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -702,8 +788,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "gf_profile_userId_unique": {
-          "name": "gf_profile_userId_unique",
+        "profile_userId_unique": {
+          "name": "profile_userId_unique",
           "nullsNotDistinct": false,
           "columns": [
             "userId"
@@ -711,8 +797,8 @@
         }
       }
     },
-    "public.gf_replies": {
-      "name": "gf_replies",
+    "public.replies": {
+      "name": "replies",
       "schema": "",
       "columns": {
         "id": {
@@ -752,12 +838,20 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "replies_post_id_idx": {
+          "name": "replies_post_id_idx",
+          "columns": [
+            "postId"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "gf_replies_userId_gf_user_id_fk": {
-          "name": "gf_replies_userId_gf_user_id_fk",
-          "tableFrom": "gf_replies",
-          "tableTo": "gf_user",
+        "replies_userId_user_id_fk": {
+          "name": "replies_userId_user_id_fk",
+          "tableFrom": "replies",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -767,10 +861,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "gf_replies_postId_gf_posts_id_fk": {
-          "name": "gf_replies_postId_gf_posts_id_fk",
-          "tableFrom": "gf_replies",
-          "tableTo": "gf_posts",
+        "replies_postId_posts_id_fk": {
+          "name": "replies_postId_posts_id_fk",
+          "tableFrom": "replies",
+          "tableTo": "posts",
           "columnsFrom": [
             "postId"
           ],
@@ -780,10 +874,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "gf_replies_groupId_gf_group_id_fk": {
-          "name": "gf_replies_groupId_gf_group_id_fk",
-          "tableFrom": "gf_replies",
-          "tableTo": "gf_group",
+        "replies_groupId_group_id_fk": {
+          "name": "replies_groupId_group_id_fk",
+          "tableFrom": "replies",
+          "tableTo": "group",
           "columnsFrom": [
             "groupId"
           ],
@@ -797,8 +891,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.gf_reset_tokens": {
-      "name": "gf_reset_tokens",
+    "public.reset_tokens": {
+      "name": "reset_tokens",
       "schema": "",
       "columns": {
         "id": {
@@ -826,12 +920,20 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "reset_tokens_token_idx": {
+          "name": "reset_tokens_token_idx",
+          "columns": [
+            "token"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "gf_reset_tokens_userId_gf_user_id_fk": {
-          "name": "gf_reset_tokens_userId_gf_user_id_fk",
-          "tableFrom": "gf_reset_tokens",
-          "tableTo": "gf_user",
+        "reset_tokens_userId_user_id_fk": {
+          "name": "reset_tokens_userId_user_id_fk",
+          "tableFrom": "reset_tokens",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -844,8 +946,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "gf_reset_tokens_userId_unique": {
-          "name": "gf_reset_tokens_userId_unique",
+        "reset_tokens_userId_unique": {
+          "name": "reset_tokens_userId_unique",
           "nullsNotDistinct": false,
           "columns": [
             "userId"
@@ -853,8 +955,8 @@
         }
       }
     },
-    "public.gf_session": {
-      "name": "gf_session",
+    "public.session": {
+      "name": "session",
       "schema": "",
       "columns": {
         "id": {
@@ -876,12 +978,20 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "sessions_user_id_idx": {
+          "name": "sessions_user_id_idx",
+          "columns": [
+            "userId"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "gf_session_userId_gf_user_id_fk": {
-          "name": "gf_session_userId_gf_user_id_fk",
-          "tableFrom": "gf_session",
-          "tableTo": "gf_user",
+        "session_userId_user_id_fk": {
+          "name": "session_userId_user_id_fk",
+          "tableFrom": "session",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -895,8 +1005,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.gf_subscriptions": {
-      "name": "gf_subscriptions",
+    "public.subscriptions": {
+      "name": "subscriptions",
       "schema": "",
       "columns": {
         "id": {
@@ -936,12 +1046,20 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "subscriptions_stripe_subscription_id_idx": {
+          "name": "subscriptions_stripe_subscription_id_idx",
+          "columns": [
+            "stripeSubscriptionId"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "gf_subscriptions_userId_gf_user_id_fk": {
-          "name": "gf_subscriptions_userId_gf_user_id_fk",
-          "tableFrom": "gf_subscriptions",
-          "tableTo": "gf_user",
+        "subscriptions_userId_user_id_fk": {
+          "name": "subscriptions_userId_user_id_fk",
+          "tableFrom": "subscriptions",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -953,10 +1071,18 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "subscriptions_userId_unique": {
+          "name": "subscriptions_userId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "userId"
+          ]
+        }
+      }
     },
-    "public.gf_user": {
-      "name": "gf_user",
+    "public.user": {
+      "name": "user",
       "schema": "",
       "columns": {
         "id": {
@@ -982,8 +1108,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "gf_user_email_unique": {
-          "name": "gf_user_email_unique",
+        "user_email_unique": {
+          "name": "user_email_unique",
           "nullsNotDistinct": false,
           "columns": [
             "email"
@@ -991,8 +1117,8 @@
         }
       }
     },
-    "public.gf_verify_email_tokens": {
-      "name": "gf_verify_email_tokens",
+    "public.verify_email_tokens": {
+      "name": "verify_email_tokens",
       "schema": "",
       "columns": {
         "id": {
@@ -1020,12 +1146,20 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "verify_email_tokens_token_idx": {
+          "name": "verify_email_tokens_token_idx",
+          "columns": [
+            "token"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "gf_verify_email_tokens_userId_gf_user_id_fk": {
-          "name": "gf_verify_email_tokens_userId_gf_user_id_fk",
-          "tableFrom": "gf_verify_email_tokens",
-          "tableTo": "gf_user",
+        "verify_email_tokens_userId_user_id_fk": {
+          "name": "verify_email_tokens_userId_user_id_fk",
+          "tableFrom": "verify_email_tokens",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
@@ -1038,8 +1172,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "gf_verify_email_tokens_userId_unique": {
-          "name": "gf_verify_email_tokens_userId_unique",
+        "verify_email_tokens_userId_unique": {
+          "name": "verify_email_tokens_userId_unique",
           "nullsNotDistinct": false,
           "columns": [
             "userId"

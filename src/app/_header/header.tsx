@@ -22,6 +22,7 @@ import {
 import { getProfileImageFullUrl } from "@/app/dashboard/settings/profile/profile-image";
 import { Notifications } from "./notifications";
 import { MenuButton } from "./menu-button";
+import { BrandText } from "@/components/brand/brand-text";
 
 export async function Header() {
   const user = await getCurrentUser();
@@ -31,15 +32,16 @@ export async function Header() {
       <div className="mx-auto flex w-full max-w-7xl py-4 justify-between">
         <div className="flex justify-between gap-10 items-center">
           <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/group.jpeg"
+            {/* <Image
+              src="/codac-logo.png"
               alt="Group Finder Logo"
               width={40}
               height={40}
               className="rounded-full"
-            />
-            <span className="text-sm md:text-base lg:text-2xl font-bold">
-              {applicationName}
+            /> */}
+            <span className="text-lg md:text-2xl lg:text-4xl text-primary">
+              <BrandText> {applicationName.toUpperCase()}</BrandText>
+
             </span>
           </Link>
 

@@ -81,6 +81,17 @@ const config = {
           to: { height: "0" },
         },
       },
+      
+      dashdraw: {
+        from: {
+          ["stroke-dashoffset"]: "2338",
+          ["stroke-dasharray"]: "2338",
+        },
+        to: {
+          ["stroke-dashoffset"]: "0",
+          ["stroke-dasharray"]: "2338",
+        },
+      },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",

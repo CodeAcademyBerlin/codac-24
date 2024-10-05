@@ -92,6 +92,17 @@ export async function toggleGroupVisibilityUseCase(
   });
 }
 
+export async function toggleGroupCohortUseCase(
+  authenticatedUser: UserSession,
+  groupId: GroupId
+) {
+  const group = await assertGroupOwner(authenticatedUser, groupId);
+
+  await updateGroup(groupId, {
+    isCohort: !group.isCohort,
+  });
+}
+
 export async function getGroupMembersUseCase(
   authenticatedUser: UserSession | undefined,
   groupId: GroupId

@@ -1,11 +1,22 @@
 import { database } from "@/db";
-import { User, accounts, users } from "@/db/schema";
+import { User, accounts, profiles, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import crypto from "crypto";
 import { UserId } from "@/use-cases/types";
 import { getAccountByUserId } from "@/data-access/accounts";
+import { promise } from "zod";
 
 const ITERATIONS = 10000;
+
+
+export async function getUsers() {
+  const users = await database.query.users.findMany();
+  return users;
+}
+export async function getUsersWithProfile() {
+  const result = await database.select().from(users).innerJoin(profiles, eq(users.id, profiles.userId));
+  return result;
+}
 
 export async function deleteUser(userId: UserId) {
   await database.delete(users).where(eq(users.id, userId));
