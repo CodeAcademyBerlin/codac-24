@@ -158,17 +158,17 @@ export const cohorts = pgTable("cohort", {
   endDate: timestamp('endDate'),
   description: text("description"),
   groupId: serial("groupId")
-  .notNull()
-  .references(() => groups.id, { onDelete: "cascade" })
+    .notNull()
+    .references(() => groups.id, { onDelete: "cascade" })
 });
 
 export const students = pgTable("student", {
   id: serial("id").primaryKey(),
   userId: integer('userId')
-  .references(() => users.id),
+    .references(() => users.id),
   cohortId: integer('cohortId')
-  .references(() => cohorts.id, { onDelete: 'cascade' })
-  .notNull(),
+    .references(() => cohorts.id, { onDelete: 'cascade' })
+    .notNull(),
   role: roleEnum("role").default("member"),
 });
 

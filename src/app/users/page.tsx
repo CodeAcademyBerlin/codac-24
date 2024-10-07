@@ -1,37 +1,49 @@
-import { GroupCard } from "@/app/dashboard/group-card";
-import { getPublicGroupsByUserIdUseCase } from "@/use-cases/groups";
-import { getUsersUseCase, getUsersWithProfileUseCase } from "@/use-cases/users";
-import Image from "next/image";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { File, PlusCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { getUsersWithProfileUseCase } from '@/use-cases/users';
+import { UsersProfileTable } from './users-profile-table';
 
-export default async function Users() {
-    // const userGroups = await getPublicGroupsByUserIdUseCase(parseInt(userId));
-    const users = await getUsersWithProfileUseCase();
+export default async function UsersPage({
+  searchParams
+}: {
+  searchParams: { q: string; offset: string };
+}) {
+  const search = searchParams.q ?? '';
+  const offset = searchParams.offset ?? 0;
+  const usersProfiles = await getUsersWithProfileUseCase();
 
-    return (
-        <div className="space-y-8">
-            {users.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-12 gap-8 dark:bg-slate-900 rounded-xl">
-                    <Image
-                        src="/empty-state/mountain.svg"
-                        width="200"
-                        height="200"
-                        alt="no groups placeholder image"
-                        className="w-full max-w-[200px] h-auto"
-                    />
-                    <h2 className="text-2xl text-center px-4">
-                        No users found
-                    </h2>
-                </div>
-            )}
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-                {users.map((user) => (
-                    <p key={user.user.email}>{user.profile.displayName}</p>
-                ))}
-
-
-
-            </div>
+  return (
+    <Tabs defaultValue="all">
+      <div className="flex items-center">
+        <TabsList>
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="active">Active</TabsTrigger>
+          <TabsTrigger value="draft">Draft</TabsTrigger>
+          <TabsTrigger value="archived" className="hidden sm:flex">
+            Archived
+          </TabsTrigger>
+        </TabsList>
+        <div className="ml-auto flex items-center gap-2">
+          <Button size="sm" variant="outline" className="h-8 gap-1">
+            <File className="h-3.5 w-3.5" />
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+              Export
+            </span>
+          </Button>
+          <Button size="sm" className="h-8 gap-1">
+            <PlusCircle className="h-3.5 w-3.5" />
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+              Add Product
+            </span>
+          </Button>
         </div>
-    );
+      </div>
+      <TabsContent value="all">
+        <UsersProfileTable
+          usersProfiles={usersProfiles}
+        />
+      </TabsContent>
+    </Tabs>
+  );
 }
