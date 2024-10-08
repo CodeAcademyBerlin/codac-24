@@ -60,6 +60,7 @@ import { Button } from '@/components/ui/button';
 import { getUsersWithProfileUseCase } from '@/use-cases/users';
 import { UsersProfileRow } from './users-profile-row';
 import { User, Profile } from '@/db/schema';
+import Link from "next/link";
 
 
 export async function UsersProfileTable({ usersProfiles }: { usersProfiles: { user: User, profile: Profile }[] }) {
@@ -76,17 +77,17 @@ export async function UsersProfileTable({ usersProfiles }: { usersProfiles: { us
             <CardContent>
                 <Table>
                     <TableHeader>
-                        <TableRow>
+                        <TableRow >
                             <TableHead className="hidden w-[100px] sm:table-cell">
                                 <span className="sr-only">Image</span>
                             </TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Role</TableHead>
                             <TableHead className="hidden md:table-cell">Id</TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Role</TableHead>
                             <TableHead className="hidden md:table-cell">
                                 Actions
                             </TableHead>
-                            <TableHead className="hidden md:table-cell">Created at</TableHead>
                             <TableHead>
                                 <span className="sr-only">Actions</span>
                             </TableHead>
@@ -94,6 +95,7 @@ export async function UsersProfileTable({ usersProfiles }: { usersProfiles: { us
                     </TableHeader>
                     <TableBody>
                         {usersProfiles.map((userProfile) => (
+
                             <UsersProfileRow key={userProfile.user.id} user={userProfile.user} profile={userProfile.profile} />
                         ))}
                     </TableBody>

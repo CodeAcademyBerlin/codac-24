@@ -1,5 +1,6 @@
 export type Plan = "free" | "basic" | "premium";
-export type Role = "owner" | "admin" | "member";
+export type GroupRole = "owner" | "admin" | "member";
+export type Role = "user" | "student" | "mentor" | "admin";
 
 export type UserProfile = {
   id: UserId;
@@ -17,5 +18,5 @@ export type MemberInfo = {
   name: string | null;
   userId: UserId;
   image: string | null;
-  role: Role;
+  role: GroupRole;
 };

@@ -1,6 +1,6 @@
 "use server";
 
-import { lucia, validateRequest } from "@/auth";
+import { lucia, validateRequest } from "@/lib/auth";
 import { authenticatedAction } from "@/lib/safe-action";
 import { markNotificationAsReadUseCase } from "@/use-cases/notifications";
 import { revalidatePath } from "next/cache";

@@ -50,6 +50,13 @@
       "when": 1728057484496,
       "tag": "0006_brief_mister_fear",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1728384117989,
+      "tag": "0007_watery_sprite",
+      "breakpoints": true
     }
   ]
 }

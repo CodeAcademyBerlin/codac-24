@@ -12,7 +12,7 @@ import {
   updateUser,
   verifyPassword,
 } from "@/data-access/users";
-import { UserId, UserSession } from "@/use-cases/types";
+import { UserId, UserSession, Role } from "@/use-cases/types";
 import { createUUID } from "@/util/uuid";
 import { getFileUrl, uploadFileToBucket } from "@/lib/files";
 import { env } from "@/env";
@@ -180,6 +180,14 @@ export async function updateProfileNameUseCase(
   displayName: string
 ) {
   await updateProfile(userId, { displayName });
+}
+
+export async function updateRoleUseCase(
+  userId: UserId,
+  role: Role
+) {
+  if (role)
+    await updateUser(userId, { role });
 }
 
 export async function createGithubUserUseCase(githubUser: GitHubUser) {

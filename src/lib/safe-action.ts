@@ -1,6 +1,6 @@
 import { env } from "@/env";
 import { rateLimitByKey } from "@/lib/limiter";
-import { assertAuthenticated } from "@/lib/session";
+import { assertAdmin, assertAuthenticated } from "@/lib/session";
 import { PublicError } from "@/use-cases/errors";
 import { createServerActionProcedure } from "zsa";
 
@@ -12,9 +12,8 @@ function shapeErrors({ err }: any) {
     console.error(err);
     return {
       code: err.code ?? "ERROR",
-      message: `${!isAllowedError && isDev ? "DEV ONLY ENABLED - " : ""}${
-        err.message
-      }`,
+      message: `${!isAllowedError && isDev ? "DEV ONLY ENABLED - " : ""}${err.message
+        }`,
     };
   } else {
     return {
@@ -30,6 +29,18 @@ export const authenticatedAction = createServerActionProcedure()
     const user = await assertAuthenticated();
     await rateLimitByKey({
       key: `${user.id}-global`,
+      limit: 10,
+      window: 10000,
+    });
+    return { user };
+  });
+
+export const adminAction = createServerActionProcedure()
+  .experimental_shapeError(shapeErrors)
+  .handler(async () => {
+    const user = await assertAdmin();
+    await rateLimitByKey({
+      key: `admin-global`,
       limit: 10,
       window: 10000,
     });

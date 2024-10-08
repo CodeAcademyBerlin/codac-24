@@ -10,13 +10,15 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
-export const roleEnum = pgEnum("role", ["member", "admin"]);
+export const roleEnum = pgEnum("role", ["user", "student", "mentor", "admin"]);
+export const groupRoleEnum = pgEnum("role", ["member", "admin"]);
 export const accountTypeEnum = pgEnum("type", ["email", "google", "github"]);
 
 export const users = pgTable("user", {
   id: serial("id").primaryKey(),
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
+  role: roleEnum("role").notNull().default("user"),
 });
 
 export const accounts = pgTable("accounts", {
@@ -168,8 +170,6 @@ export const students = pgTable("student", {
     .references(() => users.id),
   cohortId: integer('cohortId')
     .references(() => cohorts.id, { onDelete: 'cascade' })
-    .notNull(),
-  role: roleEnum("role").default("member"),
 });
 
 export const memberships = pgTable("membership", {
@@ -180,7 +180,7 @@ export const memberships = pgTable("membership", {
   groupId: serial("groupId")
     .notNull()
     .references(() => groups.id, { onDelete: "cascade" }),
-  role: roleEnum("role").default("member"),
+  role: groupRoleEnum("role").default("member"),
 }, (table) => ({
   userIdGroupIdIdx: index("memberships_user_id_group_id_idx").on(table.userId, table.groupId),
 }));

@@ -1,6 +1,6 @@
 import "server-only";
-import { AuthenticationError } from "@/app/util";
-import { lucia, validateRequest } from "@/auth";
+import { AdminError, AuthenticationError } from "@/app/util";
+import { lucia, validateRequest } from "@/lib/auth";
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { UserId } from "lucia";
@@ -20,6 +20,14 @@ export const assertAuthenticated = async () => {
   }
   return user;
 };
+
+export const assertAdmin = async () => {
+  const user = await assertAuthenticated();
+  if (user.role !== "admin") {
+    throw new AdminError();
+  }
+  return user;
+}
 
 export async function setSession(userId: UserId) {
   const session = await lucia.createSession(userId, {});

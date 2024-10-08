@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { OAuth2RequestError } from "arctic";
-import { github } from "@/auth";
+import { github } from "@/lib/auth";
 import { createGithubUserUseCase } from "@/use-cases/users";
 import { getAccountByGithubIdUseCase } from "@/use-cases/accounts";
 import { afterLoginUrl } from "@/app-config";

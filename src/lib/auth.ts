@@ -2,7 +2,7 @@ import { GitHub, Google } from "arctic";
 import { Lucia } from "lucia";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { database } from "@/db";
-import { sessions, users } from "@/db/schema";
+import { roleEnum, sessions, users } from "@/db/schema";
 import { cookies } from "next/headers";
 import { User } from "lucia";
 import { Session } from "lucia";
@@ -21,6 +21,7 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => {
     return {
       id: attributes.id,
+      role: attributes.role,
     };
   },
 });
@@ -56,7 +57,7 @@ export const validateRequest = async (): Promise<
         sessionCookie.attributes
       );
     }
-  } catch {}
+  } catch { }
   return result;
 };
 
@@ -65,6 +66,7 @@ declare module "lucia" {
     Lucia: typeof lucia;
     DatabaseUserAttributes: {
       id: CustomUserId;
+      role: (typeof roleEnum.enumValues)[number]
     };
     UserId: CustomUserId;
   }

@@ -10,32 +10,37 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
-
 import { Profile, User } from '@/db/schema';
+import { redirect } from 'next/navigation'
+import Link from 'next/link';
 
 export async function UsersProfileRow({ user, profile }: { user: User, profile: Profile }) {
     return (
-        <TableRow>
+        <TableRow  >
+
             <TableCell className="hidden sm:table-cell">
-                <Image
-                    alt="Product image"
-                    className="aspect-square rounded-md object-cover"
-                    height="64"
-                    src={profile.image ?? "/codac-logo.png"}
-                    width="64"
-                />
+                <Link href={`/users/${user.id}/info`}>
+                    <Image
+                        alt="Product image"
+                        className="aspect-square rounded-md object-cover"
+                        height="64"
+                        src={profile.image ?? "/codac-logo.png"}
+                        width="64"
+                    />
+                </Link>
             </TableCell>
+            <TableCell className="hidden md:table-cell">{user.id}</TableCell>
+            <TableCell className="font-medium">{profile.displayName}</TableCell>
             <TableCell className="font-medium">{user.email}</TableCell>
+            <TableCell className="font-medium">{user.role}</TableCell>
             <TableCell>
                 {/* <Badge variant="outline" className="capitalize">
                     {user.status}
-                </Badge> */}
+                    </Badge> */}
             </TableCell>
-            <TableCell className="hidden md:table-cell">{user.id}</TableCell>
-            <TableCell className="hidden md:table-cell">{profile.displayName}</TableCell>
             {/*   <TableCell className="hidden md:table-cell">
                 {user.availableAt.toLocaleDateString("en-US")}
-            </TableCell> */}
+                </TableCell> */}
             <TableCell>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -46,7 +51,10 @@ export async function UsersProfileRow({ user, profile }: { user: User, profile: 
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <Link href={`/users/${user.id}/info`}> <DropdownMenuItem>View</DropdownMenuItem></Link>
+                        <Link href={`/users/${user.id}/edit`}> <DropdownMenuItem>Edit</DropdownMenuItem></Link>
+
+
                         <DropdownMenuItem>
                             {/* <form action={deleteProduct}>
                                 <button type="submit">Delete</button>
