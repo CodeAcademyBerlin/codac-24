@@ -10,15 +10,15 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
-export const roleEnum = pgEnum("role", ["user", "student", "mentor", "admin"]);
-export const groupRoleEnum = pgEnum("role", ["member", "admin"]);
+export const roleEnum = pgEnum("role", ["visitor", "student", "mentor", "super"]);
+export const groupRoleEnum = pgEnum("groupRole", ["member", "admin", "owner"]);
 export const accountTypeEnum = pgEnum("type", ["email", "google", "github"]);
 
 export const users = pgTable("user", {
   id: serial("id").primaryKey(),
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
-  role: roleEnum("role").notNull().default("user"),
+  role: roleEnum("role").notNull().default("visitor"),
 });
 
 export const accounts = pgTable("accounts", {
@@ -154,23 +154,44 @@ export const groups = pgTable("group", {
 
 export const cohorts = pgTable("cohort", {
   id: serial("id").primaryKey(),
+  groupId: serial("groupId"),
   name: text("name").notNull(),
   aka: text("aka"),
   startDate: timestamp('startDate'),
   endDate: timestamp('endDate'),
   description: text("description"),
-  groupId: serial("groupId")
-    .notNull()
-    .references(() => groups.id, { onDelete: "cascade" })
+  image: text("image"),
+
 });
 
 export const students = pgTable("student", {
   id: serial("id").primaryKey(),
-  userId: integer('userId')
-    .references(() => users.id),
-  cohortId: integer('cohortId')
-    .references(() => cohorts.id, { onDelete: 'cascade' })
+  userId: serial('userId'),
+  name: text('name'),
+  avatar: text('avatar'),
+  cohortId: serial('cohortId'),
+  courseId: serial('courseId')
+
 });
+
+export const courses = pgTable("course", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+})
+
+export const lessons = pgTable("lesson", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  courseId: serial("courseId")
+    .notNull()
+    .references(() => courses.id, { onDelete: "cascade" }),
+  order: integer("order").notNull(),
+
+
+})
+
 
 export const memberships = pgTable("membership", {
   id: serial("id").primaryKey(),
@@ -180,17 +201,19 @@ export const memberships = pgTable("membership", {
   groupId: serial("groupId")
     .notNull()
     .references(() => groups.id, { onDelete: "cascade" }),
-  role: groupRoleEnum("role").default("member"),
+  groupRole: groupRoleEnum("groupRole").default("member"),
 }, (table) => ({
   userIdGroupIdIdx: index("memberships_user_id_group_id_idx").on(table.userId, table.groupId),
 }));
 
 export const invites = pgTable("invites", {
   id: serial("id").primaryKey(),
+
   token: text("token")
     .notNull()
     .default(sql`gen_random_uuid()`)
     .unique(),
+  tokenExpiresAt: timestamp("tokenExpiresAt", { mode: "date" }),
   groupId: serial("groupId")
     .notNull()
     .references(() => groups.id, { onDelete: "cascade" }),
@@ -215,7 +238,7 @@ export const notifications = pgTable("notifications", {
   groupId: serial("groupId")
     .notNull()
     .references(() => groups.id, { onDelete: "cascade" }),
-  postId: integer("postId"),
+  postId: serial("postId"),
   isRead: boolean("isRead").notNull().default(false),
   type: text("type").notNull(),
   message: text("message").notNull(),
@@ -299,6 +322,11 @@ export const followingRelationship = relations(following, ({ one }) => ({
   }),
 }));
 
+export const courseLessonsRelations = relations(lessons, ({ one }) => ({
+  course: one(courses, { fields: [lessons.courseId], references: [courses.id] }),
+}))
+
+
 /**
  * TYPES
  *
@@ -306,6 +334,9 @@ export const followingRelationship = relations(following, ({ one }) => ({
  * This is useful when you need to know the shape of the data you are working with
  * in a component or function.
  */
+
+export type Role = typeof roleEnum.enumValues[number];
+export type GroupRole = typeof groupRoleEnum.enumValues[number];
 export type Subscription = typeof subscriptions.$inferSelect;
 export type Group = typeof groups.$inferSelect;
 export type NewGroup = typeof groups.$inferInsert;

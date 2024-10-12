@@ -7,9 +7,10 @@ import {
   removeMembership,
   updateMembership,
 } from "@/data-access/membership";
-import { Role, UserId, UserSession } from "@/use-cases/types";
+import { UserId, UserSession } from "@/use-cases/types";
 import { assertGroupOwner, assertGroupVisible } from "./authorization";
 import { PublicError } from "./errors";
+import { GroupRole } from "@/db/schema";
 
 export async function isGroupOwnerUseCase(
   authenticatedUser: UserSession | undefined,
@@ -86,11 +87,11 @@ export async function getMembershipListUseCase(userId: UserId) {
   return [
     ...ownedGroups.map((group) => ({
       groupId: group.id,
-      role: "admin" as Role,
+      groupRole: "admin" as GroupRole,
     })),
     ...memberships.map((membership) => ({
       groupId: membership.groupId,
-      role: membership.role as Role,
+      groupRole: membership.groupRole as GroupRole,
     })),
   ];
 }
@@ -112,8 +113,8 @@ export async function switchMemberRoleUseCase(
   {
     userId,
     groupId,
-    role,
-  }: { userId: UserId; groupId: number; role: "admin" | "member" }
+    groupRole,
+  }: { userId: UserId; groupId: number; groupRole: "admin" | "member" }
 ) {
   const membership = await getMembership(userId, groupId);
   if (!membership) {
@@ -121,6 +122,6 @@ export async function switchMemberRoleUseCase(
   }
   await assertGroupOwner(authenticatedUser, groupId);
   await updateMembership(membership.id, {
-    role,
+    groupRole,
   });
 }

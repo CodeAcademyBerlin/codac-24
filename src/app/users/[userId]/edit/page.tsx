@@ -1,23 +1,11 @@
-import { EditBioForm } from "./edit-bio-form";
-import { assertAdmin, assertAuthenticated } from "@/lib/session";
-import { Suspense, cache } from "react";
-import { getUserProfileUseCase } from "@/use-cases/users";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ConfigurationPanel } from "@/components/configuration-panel";
-import { ModeToggle } from "@/components/mode-toggle";
-import { ProfileImage } from "./profile-image";
-import { ProfileName } from "./profile-name";
 import { UserRole } from "./user-role";
 
-export const getUserProfileLoader = cache(getUserProfileUseCase);
+// export const getUserProfileLoader = cache(getUserProfileUseCase);
 export default async function EditUserPage({ params: { userId } }: { params: { userId: string } }) {
-  // const profile = await getUserProfileUseCase(parseInt(userId));
   // console.log(profile)
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        <ProfileImage userId={userId} />
-        <ProfileName userId={userId} />
         <UserRole userId={userId} />
       </div>
 
@@ -37,8 +25,8 @@ export default async function EditUserPage({ params: { userId } }: { params: { u
   );
 }
 
-export async function BioFormWrapper({ userId }: { userId: string }) {
-  await assertAdmin();
-  const profile = await getUserProfileUseCase(parseInt(userId));
-  return <EditBioForm bio={profile.bio} userId={userId} />;
-}
+// export async function BioFormWrapper({ userId }: { userId: string }) {
+//   // const user = await assertAdmin();
+//   const profile = await getUserProfileUseCase(parseInt(userId));
+//   return <EditBioForm bio={profile.bio} userId={userId} />;
+// }

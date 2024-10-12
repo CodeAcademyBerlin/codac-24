@@ -4,7 +4,7 @@ export const appConfig: {
   mode: "live",
 };
 
-export const protectedRoutes = ["/lms", "/dashboard"];
+export const protectedRoutes = ["/lms", "/dashboard", "community"];
 export const applicationName = "CODAC";
 export const companyName = "Code Academy Berlin";
 

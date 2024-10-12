@@ -4,12 +4,12 @@ import { cn } from "@/lib/utils";
 import { cardStyles, pageTitleStyles } from "@/styles/common";
 import { getGroupMembersUseCase } from "@/use-cases/groups";
 import { isGroupOwnerUseCase } from "@/use-cases/membership";
-import { Role, UserId } from "@/use-cases/types";
+import { UserId } from "@/use-cases/types";
 import Link from "next/link";
 import { InviteButton } from "../invite-button";
 import { Crown, Gavel, Users } from "lucide-react";
 import { MemberCardActions } from "./member-card-actions";
-import { GroupId } from "@/db/schema";
+import { GroupId, GroupRole } from "@/db/schema";
 
 function MemberCard({
   showActions,
@@ -22,7 +22,7 @@ function MemberCard({
     userId: UserId;
     image: string | null;
     name: string | null;
-    role: string;
+    groupRole: GroupRole;
   };
 }) {
   return (
@@ -42,7 +42,7 @@ function MemberCard({
         </Link>
         {showActions && (
           <MemberCardActions
-            userRole={member.role}
+            userRole={member.groupRole}
             groupId={groupId}
             userId={member.userId}
           />
@@ -61,9 +61,9 @@ export default async function MembersPage({
   const groupId = parseInt(params.groupId);
   const members = await getGroupMembersUseCase(user, groupId);
 
-  const owners = members.filter((member) => member.role === "owner");
-  const admins = members.filter((member) => member.role === "admin");
-  const regularMembers = members.filter((member) => member.role === "member");
+  const owners = members.filter((member) => member.groupRole === "owner");
+  const admins = members.filter((member) => member.groupRole === "admin");
+  const regularMembers = members.filter((member) => member.groupRole === "member");
 
   const isGroupOwner = !user ? false : await isGroupOwnerUseCase(user, groupId);
 

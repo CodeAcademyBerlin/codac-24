@@ -23,7 +23,7 @@ export const assertAuthenticated = async () => {
 
 export const assertAdmin = async () => {
   const user = await assertAuthenticated();
-  if (user.role !== "admin") {
+  if (user.role !== "super") {
     throw new AdminError();
   }
   return user;

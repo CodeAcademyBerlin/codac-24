@@ -1,50 +1,45 @@
 import "dotenv/config";
 
 import { database, pg } from "./index";
-import { accounts, groups, profiles, users } from "@/db/schema";
-
+import { accounts, groups, profiles, students, cohorts } from "@/db/schema";
+import characters from "./seedsample/characters.json";
+import organizations from "./seedsample/organizations.json";
 async function main() {
-  const [user] = await database
-    .insert(users)
-    .values({
-      email: "testing@example.com",
-      emailVerified: undefined,
-    })
-    .onConflictDoNothing()
-    .returning();
+  // for (let i = 0; i < organizations.length; i++) {
+  //   const group = await database
+  //     .insert(groups)
+  //     .values({
+  //       name: organizations[i].name,
+  //       description: "Cohort",
+  //       isCohort: true,
+  //       type: "cohort",
+  //       userId: 1
+  //     })
+  //     .onConflictDoNothing()
+  //     .returning();
+  //   const cohort = await database
+  //     .insert(cohorts)
+  //     .values({
+  //       name: organizations[i].name,
+  //       image: organizations[i].img,
+  //       groupId: group[0].id
 
-  const [account] = await database
-    .insert(accounts)
-    .values({
-      accountType: "email",
-      githubId: undefined,
-      googleId: undefined,
-      password:
-        "39a491e82a8c8b7d85294ce9dde7d91c62895c87e78b289dabb2e55ae5e317ee9285738a2ff5deac5de0c8182592674b28f96882527cb6d90f988fef2b96d9c2",
-      salt: "bAxwTKjE6LjYiH/tyYPin7bTGd+Gp2AlaWSJ10W6VDnDXuBeQLQYMHkxRPzuYQ7zfN9EjRE0aFxe5ECoI0TpWAeRWeoxaa/MDfc73dQ+dJA3o5t7lkzpoa8QVdT9DGkY95a24k4z1rGsROywa0VY1splQzPDPa1I7Lo7Sc6P6MU=",
-      userId: user.id,
-    })
-    .onConflictDoNothing()
-    .returning();
+  //     }).onConflictDoNothing()
+  //     .returning();
 
-  const [profile] = await database
-    .insert(profiles)
-    .values({
-      userId: user.id,
-      displayName: "Test User",
-    })
-    .onConflictDoNothing()
-    .returning();
+  // }
+  for (let i = 0; i < characters.length; i++) {
+    await database
+      .insert(students)
+      .values({
+        name: characters[i].name,
+        avatar: characters[i].img,
+      })
+      .onConflictDoNothing()
+      .returning();
+  }
 
-  const [group] = await database
-    .insert(groups)
-    .values({
-      name: "Test Group",
-      description: "This is a test group",
-      isPublic: true,
-      userId: user.id,
-    })
-    .returning();
+
 
   await pg.end();
 }

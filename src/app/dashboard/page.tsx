@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { cardStyles, pageTitleStyles } from "@/styles/common";
 import { btnIconStyles, btnStyles } from "@/styles/icons";
 import { getGroupsByUserUseCase } from "@/use-cases/groups";
-import { Search } from "lucide-react";
+import { CircleSlash2Icon, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { CreateGroupButton } from "./create-group-button";
@@ -15,6 +15,7 @@ export default async function DashboardPage() {
   const user = await assertAuthenticated();
 
   const groups = await getGroupsByUserUseCase(user);
+  console.log(groups);
 
   const hasGroups = groups.length > 0;
 
@@ -35,12 +36,8 @@ export default async function DashboardPage() {
             "flex flex-col items-center gap-6 p-12 w-full"
           )}
         >
-          <Image
-            src="/empty-state/no-data.svg"
-            width="200"
-            height="200"
-            alt="no image placeholder image"
-          ></Image>
+          <CircleSlash2Icon className="w-40 h-40 text-gray-400" />
+
           <h2>Uh-oh, you don't own any groups</h2>
 
           <div className="flex gap-4">

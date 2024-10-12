@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Notification } from "@/db/schema";
-import { BellIcon } from "lucide-react";
+import { PentagonIcon } from "lucide-react";
 import Link from "next/link";
 import { markNotificationAsReadAction } from "./actions";
 import { useServerAction } from "zsa-react";
@@ -32,7 +32,7 @@ export function Notifications({
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger>
         <div className="p-2 relative">
-          <BellIcon className="w-6 h-6" />
+          <PentagonIcon className="w-6 h-6" />
           {notifications.length > 0 && (
             <div className="absolute top-1 right-[1px] w-2 h-2 bg-red-500 rounded-full flex items-center justify-center text-xs text-white"></div>
           )}

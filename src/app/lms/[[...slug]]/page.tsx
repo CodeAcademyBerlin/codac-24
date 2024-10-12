@@ -1,21 +1,26 @@
-import { getPage, getPages } from "@/app/source";
+import { lms } from "@/app/source";
 import type { Metadata } from "next";
 import { DocsPage, DocsBody } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
 import { assertAuthenticated, getCurrentUser } from "@/lib/session";
+import { getStudentCoursesUseCase, getUsersWithProfileUseCase } from "@/use-cases/users";
 
 export default async function Page({
   params,
 }: {
   params: { slug?: string[] };
 }) {
-  const user = await getCurrentUser();
+  const user = await assertAuthenticated()
   console.log(user)
-  const page = getPage(params.slug);
+  const student = await getStudentCoursesUseCase(user.id);
+  // const lessons = await getLessonsUseCase(user.id);
+  // console.log(lessons)
+  const page = lms.getPage(params.slug);
 
   if (page == null) {
     notFound();
   }
+
 
   const MDX = page.data.exports.default;
 
@@ -30,13 +35,13 @@ export default async function Page({
 }
 
 export async function generateStaticParams() {
-  return getPages().map((page) => ({
+  return lms.getPages().map((page) => ({
     slug: page.slugs,
   }));
 }
 
 export function generateMetadata({ params }: { params: { slug?: string[] } }) {
-  const page = getPage(params.slug);
+  const page = lms.getPage(params.slug);
 
   if (page == null) notFound();
 

@@ -117,13 +117,13 @@ export async function getGroupMembersUseCase(
       name: owner.displayName,
       userId: owner.userId,
       image: owner.image,
-      role: "owner",
+      groupRole: "owner",
     },
     ...members.map((member) => ({
       name: member.profile.displayName,
       userId: member.userId,
       image: member.profile.image,
-      role: member.role ?? "member",
+      groupRole: member.groupRole ?? "member",
     })),
   ];
 }

@@ -1,10 +1,7 @@
 import { ConfigurationPanel } from "@/components/configuration-panel";
-import { ProfileNameForm } from "./profile-name-form";
-import { getCurrentUser } from "@/lib/session";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getUserProfileLoader } from "./page";
-import { getUser, getUsers } from "@/data-access/users";
+import { getUser } from "@/data-access/users";
 import { UserRoleForm } from "./user-role-form";
 
 

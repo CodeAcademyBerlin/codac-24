@@ -11,6 +11,13 @@ export class AuthenticationError extends PublicError {
   }
 }
 
+export class StudentError extends PublicError {
+  constructor() {
+    super("You must be a student to view this content");
+    this.name = "StudentError";
+  }
+}
+
 export class EmailInUseError extends PublicError {
   constructor() {
     super("Email is already in use");

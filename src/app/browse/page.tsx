@@ -14,7 +14,7 @@ import { PageHeader } from "@/components/page-header";
 import Image from "next/image";
 import { GroupPagination } from "./pagination";
 import { Button } from "@/components/ui/button";
-import { XIcon } from "lucide-react";
+import { CircleOff, XIcon } from "lucide-react";
 import Link from "next/link";
 
 export default async function BrowsePage({
@@ -111,13 +111,14 @@ async function GroupsList({ search, page }: { search?: string; page: number }) {
   if (data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 gap-8 dark:bg-slate-900 rounded-xl">
-        <Image
+        <CircleOff className="w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64" />
+        {/* <Image
           src="/empty-state/mountain.svg"
           width="200"
           height="200"
           alt="no groups placeholder image"
           className="w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64"
-        />
+        /> */}
         <h2 className="text-xl sm:text-2xl text-center">
           No groups matching your search
         </h2>

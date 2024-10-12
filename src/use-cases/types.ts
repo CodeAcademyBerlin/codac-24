@@ -1,6 +1,8 @@
+import { GroupRole } from "@/db/schema";
+
 export type Plan = "free" | "basic" | "premium";
-export type GroupRole = "owner" | "admin" | "member";
-export type Role = "user" | "student" | "mentor" | "admin";
+// export type GroupRole = "owner" | "admin" | "member";
+// export type Role = 
 
 export type UserProfile = {
   id: UserId;
@@ -18,5 +20,5 @@ export type MemberInfo = {
   name: string | null;
   userId: UserId;
   image: string | null;
-  role: GroupRole;
+  groupRole: GroupRole;
 };

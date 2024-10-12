@@ -1,6 +1,6 @@
 {
-  "id": "b01d6de7-3f7d-4c45-93cf-f2b57c5b68e5",
-  "prevId": "b092d7fa-44af-4e1a-ad87-60b94428e355",
+  "id": "a55c57bb-ee33-4241-9f8f-2df2ba0d39e4",
+  "prevId": "b18d5143-5bbc-422b-862a-b65aa634157c",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -105,6 +105,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "groupId": {
+          "name": "groupId",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
         "name": {
           "name": "name",
           "type": "text",
@@ -117,18 +123,57 @@
           "primaryKey": false,
           "notNull": false
         },
+        "startDate": {
+          "name": "startDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endDate": {
+          "name": "endDate",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
         "description": {
           "name": "description",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "info": {
-          "name": "info",
+        "image": {
+          "name": "image",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "default": "''"
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.course": {
+      "name": "course",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -302,11 +347,12 @@
           "notNull": true,
           "default": false
         },
-        "cohortId": {
-          "name": "cohortId",
-          "type": "serial",
+        "isCohort": {
+          "name": "isCohort",
+          "type": "boolean",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": false
         },
         "bannerId": {
           "name": "bannerId",
@@ -373,19 +419,6 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
-        },
-        "group_cohortId_cohort_id_fk": {
-          "name": "group_cohortId_cohort_id_fk",
-          "tableFrom": "group",
-          "tableTo": "cohort",
-          "columnsFrom": [
-            "cohortId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -441,6 +474,60 @@
           ]
         }
       }
+    },
+    "public.lesson": {
+      "name": "lesson",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "courseId": {
+          "name": "courseId",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lesson_courseId_course_id_fk": {
+          "name": "lesson_courseId_course_id_fk",
+          "tableFrom": "lesson",
+          "tableTo": "course",
+          "columnsFrom": [
+            "courseId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     },
     "public.magic_links": {
       "name": "magic_links",
@@ -514,9 +601,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "role": {
-          "name": "role",
-          "type": "role",
+        "groupRole": {
+          "name": "groupRole",
+          "type": "groupRole",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
@@ -618,9 +705,9 @@
         },
         "postId": {
           "name": "postId",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "isRead": {
           "name": "isRead",
@@ -1040,23 +1127,66 @@
           "primaryKey": true,
           "notNull": true
         },
+        "userId": {
+          "name": "userId",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "cohortId": {
           "name": "cohortId",
           "type": "serial",
           "primaryKey": false,
           "notNull": true
         },
-        "role": {
-          "name": "role",
-          "type": "role",
-          "typeSchema": "public",
+        "courseId": {
+          "name": "courseId",
+          "type": "serial",
           "primaryKey": false,
-          "notNull": false,
-          "default": "'member'"
+          "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "student_cohortId_cohort_id_fk": {
+          "name": "student_cohortId_cohort_id_fk",
+          "tableFrom": "student",
+          "tableTo": "cohort",
+          "columnsFrom": [
+            "cohortId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "student_courseId_course_id_fk": {
+          "name": "student_courseId_course_id_fk",
+          "tableFrom": "student",
+          "tableTo": "course",
+          "columnsFrom": [
+            "courseId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -1157,6 +1287,14 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'visitor'"
         }
       },
       "indexes": {},
@@ -1247,12 +1385,23 @@
         "github"
       ]
     },
+    "public.groupRole": {
+      "name": "groupRole",
+      "schema": "public",
+      "values": [
+        "member",
+        "admin",
+        "owner"
+      ]
+    },
     "public.role": {
       "name": "role",
       "schema": "public",
       "values": [
-        "member",
-        "admin"
+        "visitor",
+        "student",
+        "mentor",
+        "super"
       ]
     }
   },

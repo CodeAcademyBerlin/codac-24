@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import useMediaQuery from "@/hooks/use-media-query";
-import { BookIcon, SearchIcon, UsersIcon } from "lucide-react";
+import { Blocks, Circle, PyramidIcon, Box } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -22,8 +22,26 @@ export function HeaderLinks({ isAuthenticated }: { isAuthenticated: boolean }) {
             asChild
             className="flex items-center justify-center gap-2"
           >
+            <Link href={"/lms"}>
+              <Blocks className="w-4 h-4" /> LMS
+            </Link>
+          </Button>
+          <Button
+            variant={"link"}
+            asChild
+            className="flex items-center justify-center gap-2"
+          >
+            <Link href={"/community"}>
+              <PyramidIcon className="w-4 h-4" /> Community
+            </Link>
+          </Button>
+          <Button
+            variant={"link"}
+            asChild
+            className="flex items-center justify-center gap-2"
+          >
             <Link href={"/dashboard"}>
-              <UsersIcon className="w-4 h-4" /> Your Groups
+              <Box className="w-4 h-4" /> Dashboard
             </Link>
           </Button>
 
@@ -33,19 +51,11 @@ export function HeaderLinks({ isAuthenticated }: { isAuthenticated: boolean }) {
             className="flex items-center justify-center gap-2"
           >
             <Link href={"/browse"}>
-              <SearchIcon className="w-4 h-4" /> Browse Groups
+              <Circle className="w-4 h-4" /> Browse Groups
             </Link>
           </Button>
 
-          <Button
-            variant={"link"}
-            asChild
-            className="flex items-center justify-center gap-2"
-          >
-            <Link href={"/lms"}>
-              <BookIcon className="w-4 h-4" /> LMS
-            </Link>
-          </Button>
+
         </div>
       )}
 

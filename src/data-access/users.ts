@@ -1,5 +1,5 @@
 import { database } from "@/db";
-import { User, accounts, profiles, users } from "@/db/schema";
+import { User, accounts, courses, lessons, profiles, students, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import crypto from "crypto";
 import { UserId } from "@/use-cases/types";
@@ -13,11 +13,18 @@ export async function getUsers() {
   const users = await database.query.users.findMany();
   return users;
 }
+// export async function getUsersWithProfile() {
+//   const result = await database.select().from(users).innerJoin(profiles, eq(users.id, profiles.userId)).innerJoin(students, eq(users.id, students.userId));
+//   return result;
+// }
 export async function getUsersWithProfile() {
   const result = await database.select().from(users).innerJoin(profiles, eq(users.id, profiles.userId));
   return result;
 }
-
+export const getStudentCourses = (userId: UserId) => {
+  const result = database.select().from(students).where(eq(students.userId, userId)).innerJoin(courses, eq(students.courseId, courses.id)).innerJoin(lessons, eq(courses.id, lessons.courseId));
+  return result;
+}
 export async function deleteUser(userId: UserId) {
   await database.delete(users).where(eq(users.id, userId));
 }

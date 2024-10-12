@@ -34,7 +34,7 @@ export async function getRecentPublicPostsByUserId(userId: number) {
     .innerJoin(groups, eq(posts.groupId, groups.id))
     .where(and(eq(groups.isPublic, true), eq(posts.userId, userId)))
     .limit(20);
-  return results.map((result) => result.gf_posts);
+  return results.map((result) => result.posts);
 }
 
 export async function updatePost(postId: number, updatedPost: Partial<Post>) {

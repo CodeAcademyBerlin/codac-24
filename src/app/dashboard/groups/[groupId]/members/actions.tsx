@@ -37,7 +37,7 @@ export const switchMemberRoleAction = authenticatedAction
     await switchMemberRoleUseCase(ctx.user, {
       userId: input.userId,
       groupId: input.groupId,
-      role: input.role,
+      groupRole: input.role,
     });
     revalidatePath(`/dashboard/groups/${input.groupId}/members`);
   });

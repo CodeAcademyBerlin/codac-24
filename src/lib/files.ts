@@ -27,7 +27,7 @@ export async function getDownloadUrl(objectName: string) {
 export async function uploadFileToBucket(file: File, filename: string) {
   const Key = filename;
   const Bucket = env.CLOUDFLARE_BUCKET_NAME;
-
+  console.log('Bucket', Bucket)
   let res;
 
   try {

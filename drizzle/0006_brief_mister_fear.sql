@@ -1,1 +1,0 @@
-ALTER TABLE "group" ADD COLUMN "isCohort" boolean DEFAULT false NOT NULL;

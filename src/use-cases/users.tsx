@@ -6,13 +6,14 @@ import {
 import {
   createUser,
   deleteUser,
+  getStudentCourses,
   getUserByEmail,
   getUsers,
   getUsersWithProfile,
   updateUser,
   verifyPassword,
 } from "@/data-access/users";
-import { UserId, UserSession, Role } from "@/use-cases/types";
+import { UserId, UserSession } from "@/use-cases/types";
 import { createUUID } from "@/util/uuid";
 import { getFileUrl, uploadFileToBucket } from "@/lib/files";
 import { env } from "@/env";
@@ -53,8 +54,9 @@ import {
   getTop3UnreadNotificationsForUser,
 } from "@/data-access/notifications";
 import { createTransaction } from "@/data-access/utils";
-import { LoginError, PublicError } from "./errors";
+import { LoginError, PublicError, StudentError } from "./errors";
 import { deleteSessionForUser } from "@/data-access/sessions";
+import { GroupRole, Role } from "@/db/schema";
 
 export async function getUsersUseCase() {
   // TODO: add auth check admin
@@ -66,6 +68,16 @@ export async function getUsersWithProfileUseCase() {
   const users = await getUsersWithProfile();
   return users;
 }
+
+export async function getStudentCoursesUseCase(userId: UserId) {
+  const student = await getStudentCourses(userId);
+  if (!student) {
+    throw new StudentError();
+  }
+  return student;
+}
+
+
 export async function deleteUserUseCase(
   authenticatedUser: UserSession,
   userToDeleteId: UserId
@@ -182,6 +194,7 @@ export async function updateProfileNameUseCase(
   await updateProfile(userId, { displayName });
 }
 
+
 export async function updateRoleUseCase(
   userId: UserId,
   role: Role
@@ -189,6 +202,7 @@ export async function updateRoleUseCase(
   if (role)
     await updateUser(userId, { role });
 }
+
 
 export async function createGithubUserUseCase(githubUser: GitHubUser) {
   let existingUser = await getUserByEmail(githubUser.email);

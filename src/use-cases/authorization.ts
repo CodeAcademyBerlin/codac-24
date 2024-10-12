@@ -49,7 +49,7 @@ export async function isAdminOrOwnerOfGroup(
     throw new PublicError("Group not found");
   }
 
-  const isAdmin = membership?.role === "admin";
+  const isAdmin = membership?.groupRole === "admin";
   const isOwner = group.userId === user.id;
 
   return isAdmin || isOwner;
